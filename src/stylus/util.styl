@@ -1,0 +1,52 @@
+.textHighlighting
+    display: inline;
+    background-image: linear-gradient(180deg,transparent 54%,#fcf113 0);
+    background-size: 0 100%;
+    background-repeat: no-repeat;
+    text-decoration: none;
+    -webkit-transition: background-size .4s ease;
+    -moz-transition: background-size .4s ease;
+    -ms-transition: background-size .4s ease;
+    -o-transition: background-size .4s ease;
+    transition: background-size .4s ease;
+    &:hover
+        background-size: 100% 100%;
+        cursor: pointer;
+
+mobile_max = 500px
+pc_min = 1200px
+
+MOBILE_MAX = mobile_max
+TABLET_MIN = mobile_max + 1px
+TABLET_MAX = pc_min
+PC_MIN = pc_min + 1px
+
+mobile()
+    @media (max-width: MOBILE_MAX)
+        {block}
+tablet()
+    @media (min-width: TABLET_MIN) and (max-width: TABLET_MAX)
+        {block}
+pc()
+    @media (min-width: PC_MIN)
+        {block}
+
+html
+body
+    width 100%
+    min-height 100%
+    margin 0
+    padding 0
+
+.root_container
+    margin 0 auto
+    +mobile()
+        min-width 320px
+        width 100%
+    +tablet()
+        width TABLET_MIN + 300px
+    +pc()
+        width PC_MIN
+    
+div
+    box-sizing: border-box
