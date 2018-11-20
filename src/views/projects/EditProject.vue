@@ -1,5 +1,6 @@
 <template lang="pug">
-  .wrapper
+page-container.wrapper
+  .content_container
     projectInputs(
       v-model="project"
       )
@@ -54,8 +55,6 @@ export default {
 <style lang="stylus" scoped>
 .wrapper
   background: #F5F5F5;
-  min-height: 100vh;
-  padding 1rem
 .button
     box-sizing border-box
     width: 100%;

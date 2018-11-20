@@ -1,5 +1,5 @@
 <template lang="pug">
-page-container(:pageTitle="profile.name" :hasNav="false")
+page-container
   .profile-upper
     .profile-bg(:class="{loading:loading}")
     .profile-single(:class="{loading:loading}")

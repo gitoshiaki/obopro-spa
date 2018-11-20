@@ -1,6 +1,6 @@
 <template lang="pug">
-page-container
-  .wrapper
+page-container.wrapper
+  .content_container
     profileInputs(
       v-model="profile"
       )

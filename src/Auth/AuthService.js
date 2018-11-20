@@ -2,11 +2,14 @@ import auth0 from 'auth0-js'
 import router from '@/router'
 import store from '@/store/index'
 import { GraphQLClient } from 'graphql-request'
-import { _ENDPOINT_ } from '@/util/config'
-
-
-const AUTH0_CLIENT_ID = "9nFlL8Mr1rGLZ7v2PMlmlXSfVe6eTTGS"
-const AUTH0_DOMAIN = "obopro.auth0.com"
+import {
+  _ENDPOINT_,
+  _NAMESPACE_,
+  AUTH0_CLIENT_ID,
+  AUTH0_DOMAIN,
+  REDIRECT_URL,
+  AUDIENCE
+} from '@/util/config'
 
 export default class AuthService {
 
@@ -20,10 +23,10 @@ export default class AuthService {
   }
 
   auth0 = new auth0.WebAuth({
-    domain: 'obopro.auth0.com',
-    clientID: '9nFlL8Mr1rGLZ7v2PMlmlXSfVe6eTTGS',
-    redirectUri: 'http://localhost:8080/callback',
-    audience: 'https://obopro.com',
+    domain: AUTH0_DOMAIN,
+    clientID: AUTH0_CLIENT_ID,
+    redirectUri: REDIRECT_URL,
+    audience: AUDIENCE,
     responseType: 'token',
     scope: 'openid email'
   })
