@@ -1,0 +1,19 @@
+query permitConnect($user_id: ID!, $ownerUser_id: ID!) {
+  SomeUserExists(filter: {
+    AND: [{
+      id: $user_id
+    }, {
+      id: $ownerUser_id
+    }]
+  })
+}
+
+query permitDisconnect($user_id: ID!, $ownerUser_id: ID!) {
+  SomeUserExists(filter: {
+    AND: [{
+      id: $user_id
+    }, {
+      id: $ownerUser_id
+    }]
+  })
+}

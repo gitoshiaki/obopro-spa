@@ -1,0 +1,8 @@
+query isOwner($node_id: ID!, $user_id: ID!) {
+  SomeProfileExists(filter: {
+    id: $node_id,
+    user: {
+      id: $user_id
+    }  
+  })
+}

@@ -1,0 +1,2 @@
+export const _ENDPOINT_ = "https://api.graph.cool/simple/v1/cjmsqccie3bpy0143nq0cjtgv"
+export const thumbnailDefault = "https://res.cloudinary.com/dp5qt2zx6/image/upload/v1540882398/Obopro/user_icon.png"

@@ -1,0 +1,50 @@
+type File @model {
+  contentType: String!
+  createdAt: DateTime!
+  id: ID! @isUnique
+  name: String!
+  secret: String! @isUnique
+  size: Int!
+  updatedAt: DateTime!
+  url: String! @isUnique
+}
+
+type Project @model {
+  id: ID! @isUnique
+  name: String! @isUnique
+  description: String!
+  updatedAt: DateTime!
+  createdAt: DateTime!
+  owner: User @relation(name: "ProjectOnOwner")
+  members: [User!]! @relation(name: "ProjectOnMember")
+}
+
+type Profile @model {
+  id: ID! @isUnique
+  name: String! @isUnique
+  furigana: String! @isUnique
+  description: String! @defaultValue(value: "")
+  thumbnailUrl: String! @defaultValue(value: "https://res.cloudinary.com/dp5qt2zx6/image/upload/v1540882398/Obopro/user_icon.png")
+  updatedAt: DateTime!
+  createdAt: DateTime!
+  user: User @relation(name: "ProfileOnUser")
+}
+
+type User @model {
+  id: ID! @isUnique
+  updatedAt: DateTime!
+  createdAt: DateTime!
+
+  profile: Profile @relation(name: "ProfileOnUser")
+  ownerProjects: [Project!]! @relation(name: "ProjectOnOwner")
+  memberProjects: [Project!]! @relation(name: "ProjectOnMember")
+
+  auth0UserId: String @isUnique
+  email: String @isUnique
+  role: UserRole! @defaultValue(value: "MEMBER")
+}
+
+enum UserRole {
+  MEMBER,
+  ADMIN
+}

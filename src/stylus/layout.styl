@@ -1,0 +1,49 @@
+.root_container
+    margin 0 auto
+    +mobile()
+        min-width 320px
+        width 100%
+    +tablet()
+        width TABLET_MIN + 300px
+    +pc()
+        width PC_MIN
+
+.content_container
+    margin 0 auto
+    padding 1rem
+    +mobile()
+        width 100%
+    +tablet()
+        width 80%
+    +pc()
+        width 80%
+
+.fabs
+    position: fixed;
+    bottom: 5rem;
+    right: 2rem;
+
+    display block
+.fab
+    width: 3rem;
+    height: 3rem;
+    border-radius: 3rem;
+
+    background: white;
+    box-shadow: 0 0 20px 0 rgba(0,0,0,0.2);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    z-index: 1;
+
+    cursor pointer
+    &:hover
+    &:focus
+    &:active
+      outline 0
+      transform scale(.95)
+    
+    + .fab
+        margin-top: 1rem;
