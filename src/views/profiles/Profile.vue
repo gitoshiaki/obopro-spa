@@ -65,7 +65,7 @@ export default {
     return {
       profile: {},
       loading: true,
-      tabs: 'project'
+      tabs: 'profile'
     }
   },
   computed: {
