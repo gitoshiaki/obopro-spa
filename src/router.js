@@ -34,7 +34,11 @@ const router = new Router({
       component: Callback
     },
     {
-      path: '/Search',
+      path: '/logoutCallback',
+      redirect: { name: 'LandingPage' }
+    },
+    {
+      path: '/search',
       name: 'Search',
       component: Search,
       meta: { requiresAuth: true },
@@ -94,27 +98,36 @@ const router = new Router({
   ],
 });
 
+const {log} = console
+
+async function authenticate(){
+  if (store.state.authenticated) return true
+  new AuthService().login()
+}
+
+function checkProfile(to, from, next){
+  return store.state.profile && store.state.profile.id
+}
+
+async function findOrCreateProfile(to, from, next){
+  const user = await store.dispatch("fetchUserData", { id: store.state.user_id })
+  if (store.state.profile && store.state.profile.id) return
+  if (user === null) next({name:"CreateProfile"})
+}
+
 router.beforeEach(async (to, from, next) => {
-  console.log("before each!");
-  
-  if (!to.matched.some(record => record.meta.requiresAuth)) {
-    return next()
-  }
-  console.log("require auth!");
-  if (!store.state.authenticated) {
-    return new AuthService().login()
-  }
-  if (
-    to.name != 'CreateProfile' &&
-    !(store.state.profile && store.state.profile.name)
-  ) {
-    return store.dispatch("fetchUserData",{id:store.state.user_id})
-    .then((User)=>{
-      if (!User.profile && !User.profile.name) {
-        return next({ name: 'CreateProfile' })
-      }
-      return next()
-    })
+  if (!to.matched.some(record => record.meta.requiresAuth)) return next()
+  await authenticate()
+  if(checkProfile()){
+    log("profile alive")
+    if (to.name == 'CreateProfile'){
+      log("already set profile")
+      return next({name:"Search"})
+    }
+  }else{
+    if (to.name == 'CreateProfile') next()
+    log("fetch profile")
+    await findOrCreateProfile(to, from, next)
   }
   return next()
 })

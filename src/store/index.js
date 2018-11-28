@@ -9,6 +9,8 @@ import profileModule from '@/store/profileModule.js'
 import projectModule from '@/store/projectModule.js'
 import userModule from '@/store/userModule.js'
 
+const {log} = console
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -37,8 +39,9 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    login(state) {
+    login(state, { user_id }) {
       state.authenticated = true
+      state.user_id = user_id
     },
     logout(state) {
       state.authenticated = false
@@ -46,60 +49,71 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    authenticate({ commit, getters }) {
-      console.log("graphcool auth start!");
+    authenticate({ commit, getters, dispatch }) {
+      const auth = new AuthService()
       const accessToken = localStorage.getItem('access_token')
-      getters.client.request(`
-                mutation {
-                    authenticateUser(
-                        accessToken: "${accessToken}"
-                    ){
-                        id
-                        token
-                    }
-                }
-            `)
-        .then((data) => {
-          console.log("graphcool auth success!:", data);
-          const authenticated = data.authenticateUser
-          commit("login")
-          localStorage.setItem('user_id', authenticated.id)
-          localStorage.setItem('node_token', authenticated.token)
-          return
-        })
-        .catch((e) => {
-          console.log(e)
-          return
-        })
+      if (!auth.isTokenSessionAlive || !accessToken) auth.login()
+
+      dispatch('authenticateUser', { accessToken })
+      .then((data) => {
+        console.log("authentication success", data)
+        const {authenticateUser} = data
+        localStorage.setItem('user_id', authenticateUser.id)
+        localStorage.setItem('node_token', authenticateUser.token)
+        commit("login", { user_id: authenticateUser.id })
+        router.push({ name: "Search" })
+      })
+      .catch((e) => {
+        console.log("graphcool authentication error",e)
+        router.push("/")
+      })
+    },
+
+
+    authenticateUser({ commit, getters, state }, {
+      accessToken
+    }) {
+      return getters.client.request(
+      `
+        mutation {
+          authenticateUser(
+            accessToken: "${accessToken}"
+          ){
+            id
+            token
+          }
+        }
+      `)
     },
 
     logout({ commit }) {
-      console.log("logout!");
-      commit("logout")
-      localStorage.removeItem('use_id')
+      localStorage.removeItem('user_id')
       localStorage.removeItem('node_token')
-      router.push("/")
-      return
+      commit("logout")
     },
 
     fetchUserData({ commit, getters, state }, {
       id
     }){
-      console.log("fetchUserData!")
-      return getters.client.request(`
-      query {
-        User(id: "${id}") {
-          id,
-          profile {
+      return getters.client.request(
+      `
+        query {
+          User(id: "${id}") {
             id,
-            name,
-            thumbnailUrl
+            profile {
+              id,
+              name,
+              thumbnailUrl
+            }
           }
         }
-      }
       `).then(data => {
-        state.profile = data.User.profile
+        const {User} = data
+        if(User === null) return
+        state.profile = User.profile
         return data.User
+      }).catch(e => {
+        console.log(e)
       })
     }
 

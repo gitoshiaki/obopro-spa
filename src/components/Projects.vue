@@ -7,9 +7,9 @@
     @click="showProject(project.id)"
     )
     //- img.image(src="/images/ichgei_banner.png")
-    .date {{project.updatedAt | dateFormat}}
+    .date {{project.updatedAt | relativeTime}}
     .name {{project.name | truncate(30)}}
-    attachedProfile(
+    attachedProfile.profile(
       :profile="project.owner.profile"
       )
 </template>
@@ -31,19 +31,6 @@ export default {
       this.$router.push({ name: 'Project', params: { id: project_id }})
     },
   },
-  filters: {
-    dateFormat (value) {
-      if (!value) return ''
-      value = value.toString()
-      return moment(value).format('YYYY/MM/DD HH:MM')
-    },
-    truncate (value, length, omission) {
-      const len = length ? parseInt(length, 10) : 20;
-      const omm = omission ? omission.toString() : '...';
-      if(value.length <= len) return value
-      return value.substring(0, length) + omm;
-    }
-  },
 };
 </script>
 
@@ -60,8 +47,9 @@ export default {
 
 .project
   display: flex;
-  justify-content: center;
   flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
   width: 100%;
   height: 10rem;
   margin: 1rem 0;
@@ -81,6 +69,8 @@ export default {
     margin-bottom .5rem
     font-weight bold
     color gray
+  > .profile
+    margin-top .5rem
 
   
 

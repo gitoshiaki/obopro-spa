@@ -11,6 +11,13 @@ import FontAwesomeIcon from '@/util/fontawesome'
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 import VueParticles from 'vue-particles'
+import filters from '@/util/filters'
+
+const {log} = console
+Object.keys(filters).forEach(name => {
+  Vue.filter(name, filters[name])
+});
+
 
 Vue.use(VueParticles)
 

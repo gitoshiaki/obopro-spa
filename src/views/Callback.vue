@@ -8,21 +8,16 @@
 
 export default {
   name: 'callback',
-  computed: {
-    authenticated(){
-      return this.$store.state.authenticated
-    }
-  },
-  watch: {
-    authenticated(value){
-      if(value){
-        this.$router.push({name:"Search"})
-      }
-    }
-  },
   mounted(){
     this.$auth0.handleCallback()
-  }
+    .then(()=>{
+      this.$store.dispatch("authenticate")
+    })
+    .catch(() => {
+      console.log("token handling error")
+      return this.$router.push("/")
+    })
+  },
 }
 </script>
 

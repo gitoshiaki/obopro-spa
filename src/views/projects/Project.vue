@@ -2,6 +2,11 @@
 page-container
   .content_container
     p.name {{ project.name }}
+    .meta
+      .modified last modified {{project.updatedAt | relativeTime}}
+      attachedProfile.profile(
+        :profile="project.owner.profile"
+        )
     MDrenderer.description(
       v-if="project.description"
       :raw="project.description"
@@ -24,12 +29,14 @@ page-container
 <script>
 import actionButton from "@/components/actionButton"
 import MDrenderer from '@/components/MDrenderer'
+import attachedProfile from "@/components/attachedProfile"
 
 export default {
   name: 'Project',
   components: {
     actionButton,
     MDrenderer,
+    attachedProfile
   },
   props: {
     id: String
@@ -74,4 +81,20 @@ export default {
   line-height: 3rem;
 .description
   margin 3rem 0 5rem
+.row
+  display flex
+  justify-content flex-start
+  align-items center
+.meta
+  > *
+    margin-bottom 1rem
+.modified
+  font-size: .8rem;
+  color: darkgray;
+.profile
+  &:before
+    content: "by";
+    margin-right: .5rem;
+    font-size: .8rem;
+    color: darkgray;
 </style>

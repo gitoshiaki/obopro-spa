@@ -49,7 +49,6 @@ page-container
 import thumbnailImage from "@/components/thumbnailImage"
 import actionButton from "@/components/actionButton"
 import MDrenderer from '@/components/MDrenderer'
-import moment from "moment"
 
 export default {
   name: 'Profile',
@@ -90,24 +89,6 @@ export default {
         );
     }
   },
-  filters: {
-    capitalize(value) {
-      if (!value) return ''
-      const values = value.toString().split(/\s+/)
-      return values.map((value)=>{
-        return value.charAt(0).toUpperCase() + value.slice(1)
-      }).join(" ")
-    },
-    moment(date) {
-      return moment(date).format('YYYY/MM/DD');
-    },
-    resizeTitle(text) {
-      if(text.length > 10){
-        return text.slice(0,9)+"..."
-      }
-      return text
-    }
-  }
 };
 </script>
 

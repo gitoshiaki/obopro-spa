@@ -1,6 +1,6 @@
 <template lang="pug">
-page-container
-  .wrapper
+page-container(:hasNav="false").wrapper
+  .content_container
     profileInputs(
       v-model="profile"
       )
@@ -12,6 +12,7 @@ import profileInputs from '@/components/profileInputs'
 import actionButton from "@/components/actionButton"
 import api from '@/util/api'
 import { thumbnailDefault } from '@/util/config'
+import {mapState} from 'vuex'
 
 export default {
   name: "CreateProfile",
@@ -21,7 +22,6 @@ export default {
   },
   data(){
     return {
-      id: localStorage.getItem('user_id'),
       profile: {
         thumbnailUrl: thumbnailDefault,
         name: "",
@@ -30,9 +30,16 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapState(['user_id'])
+  },
+  mounted(){
+    if (this.$store.state.profile && this.$store.state.profile.id) this.$router.go(-1)
+  },
   methods: {
     async create(){
       const {name,furigana,description} = this.profile
+      const userId = this.user_id
       const thumbnailUrl = await this.handleThumb({
           file: this.profile.thumbnailData,
           url: this.profile.thumbnailUrl
@@ -42,7 +49,7 @@ export default {
           name,
           furigana,
           description,
-          userId: this.id
+          userId
         }).catch(this.handleError)
       if(!data.createProfile) return this.handleError(data)
       this.$router.push(

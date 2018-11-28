@@ -32,7 +32,6 @@ export default {
     vertical-align bottom
     justify-content flex-start
     align-items: center;
-    margin-top .5rem
     .thumbnail
         width 1.5rem
         margin-right .5rem

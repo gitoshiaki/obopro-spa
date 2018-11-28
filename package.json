@@ -26,6 +26,7 @@
     "graphql": "^14.0.2",
     "graphql-request": "^1.8.2",
     "graphql-tag": "^2.10.0",
+    "gsap": "^2.0.2",
     "i": "^0.3.6",
     "marked": "^0.5.1",
     "moment": "^2.22.2",

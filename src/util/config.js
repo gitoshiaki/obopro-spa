@@ -6,3 +6,14 @@ export const AUTH0_CLIENT_ID = '9nFlL8Mr1rGLZ7v2PMlmlXSfVe6eTTGS'
 export const AUTH0_DOMAIN = 'obopro.auth0.com'
 export const REDIRECT_URL = location.protocol + "//" + location.host + "/callback"
 export const AUDIENCE = 'https://obopro.com'
+export const LOGOUT_URL = location.protocol + "//" + location.host + "/logoutCallback"
+
+export function RETURN_TO_URL(){
+    function encode(url){
+        return encodeURI(url).replace(/\:|\//g,
+            match => {
+                return{[':']:'%3A',['/']:'%2F'}[match]
+            })
+    }
+    return encode(LOGOUT_URL)
+}

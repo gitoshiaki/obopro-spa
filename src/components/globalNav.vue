@@ -1,48 +1,44 @@
 <template lang="pug">
 nav.nav
-    .nav__button(@click="$router.push({name:'Search'})")
+    .nav__button(@click="openSearchPage")
         font-awesome-icon(icon="search")
     
-    .nav__button(@click="$router.push({name:'Profile',params: {id:$store.state.profile.id}})")
-        font-awesome-icon(icon="user")
-    
-    .nav__button(@click="$router.push({name:'CreateProject'})")
+    .nav__button(@click="openCreateProjectPage")
         font-awesome-icon(icon="plus")
-
-    //- template(v-if="!$store.state.authenticated")
-    //-     .nav__button(
-    //-         @click="$auth0.login()"
-    //-         ) Log In
-    //- template(v-else)
-    //-     .nav__button(
-    //-         @click="$router.push({name:'create'})"
-    //-         ) New
-
-    //-     .nav__button(
-    //-         @click="$store.dispatch('logout')"
-    //-         ) Log Out
+    
+    .nav__button(@click="openModal")
+        font-awesome-icon(icon="bars")
 </template>
 
 <script>
+import {mapState} from 'vuex'
+import CardMenu from '@/components/CardMenu'
+
 export default {
     name: "globalNav",
-    data(){
-        return {
-            profile: {}
-        }
+    computed: {
+        ...mapState({
+            profile: state => state.profile || null
+        })
     },
-    mounted(){
-        const profile = this.$store.state.profile
-        console.log(profile);
+    methods: {
+        openModal(){
+            this.$modal.open({
+                parent: this,
+                component: CardMenu,
+                })
+        },
+        openCreateProjectPage(){
+            this.$router.push({
+                name:'CreateProject'
+                })
+        },
+        openSearchPage(){
+            this.$router.push({
+                name:'Search'
+                })
+        },
         
-        if(!profile){
-            const id = this.$store.state.user_id
-            this.$store.dispatch("fetchUserData",{id})
-            .then((data)=>{
-                this.profile = data.User.profile
-            })
-        }
-        this.profile = profile
     }
 }
 </script>

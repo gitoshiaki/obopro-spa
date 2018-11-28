@@ -2,23 +2,6 @@
 .wrapper
     .background(
         id="particles-js"
-    )
-    //- vue-particles.background(
-        color="#dedede"
-        :particleOpacity="0.7"
-        :particlesNumber="80"
-        shapeType="circle"
-        :particleSize="4"
-        linesColor="#dedede"
-        :linesWidth="1"
-        :lineLinked="true"
-        :lineOpacity="0.4"
-        :linesDistance="150"
-        :moveSpeed="3"
-        :hoverEffect="true"
-        hoverMode="grab"
-        :clickEffect="true"
-        clickMode="push"
         )
     img.frontItem.logo(
         src="/images/oboprologo.svg"
@@ -27,6 +10,9 @@
         actionButton.frontItem.b(
             @click="$router.push({name: 'Search'})"
             ) Get Started
+        actionButton.frontItem.b(
+            @click="$store.dispatch('logout')"
+            ) SignOut
     template(v-else)
         actionButton.frontItem.b(
             @click="$auth0.login()"
@@ -35,12 +21,19 @@
 </template>
 
 <script>
+import { TimelineLite, Back, Elastic, Expo } from "gsap"
 import actionButton from "@/components/actionButton"
 import particleConf from "@/util/particleConf"
 export default {
     name: 'LandingPage',
     components: {
         actionButton,
+    },
+    data(){
+        return {
+            title: "We Are Creators",
+            subtitle: "Acceralating Collaboration",
+        }
     },
     computed: {
         loggedIn(){
@@ -50,7 +43,48 @@ export default {
     mounted(){
         require('particles.js')
         particlesJS('particles-js',particleConf)
-    }
+        setTimeout(()=>{
+            this.$toast.open('Something happened')
+            this.animate()
+        },1000)
+    },
+    methods: {
+        animate(){
+            const { bubble, bubblePulse } = this.$refs
+            const timeline = new TimelineLite()
+            
+            timeline.to(bubble, 0.4, {
+                scale: 0.8,
+                rotation: 16,
+                ease: Back.easeOut.config(1.7),
+            })   
+            timeline.to(
+                bubblePulse,
+                0.5, 
+            {
+                scale: 0.9,
+                opacity: 1,
+            },
+            '-=0.6' 
+            )
+            
+            timeline.to(bubble, 1.2, {
+                scale: 1,
+                rotation: '-=16',
+                ease: Elastic.easeOut.config(2.5, 0.5),
+            })
+            timeline.to(
+                bubblePulse,
+                1.1,
+            {
+                scale: 3,
+                opacity: 0,
+                ease: Expo.easeOut,
+            },
+            '-=1.2'
+            )
+        }
+    },
 }
 </script>
 
@@ -91,4 +125,41 @@ export default {
     border: 2px solid #fff;
     background: inherit;
     width: 70vw;
+.title
+    width: 70vw;
+    z-index: 1;
+    font-size: 4rem;
+    line-height: 6rem;
+    font-family: 'Merriweather', serif;
+
+
+
+.bubble-wrapper
+  position: relative;
+.bubble
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid white;
+  background: #272727;
+  border-radius: 50%;
+  height: 100px;
+  width: 100px;
+.bubble-pulse
+  position: absolute;
+  z-index: 1;
+  height: 120px;
+  width: 120px;
+  top: 50%;
+  left: 50%;
+  margin-top: -60px;
+  margin-left: -60px;
+  background: #272727;
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(0);
+.bubble-image
+  height: 50%;
 </style>

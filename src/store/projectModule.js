@@ -42,7 +42,8 @@ export default {
                   id,
                   profile {
                     id,
-                    name
+                    name,
+                    thumbnailUrl
                   }
                 }
               }
